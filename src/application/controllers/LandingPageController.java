@@ -646,16 +646,16 @@ public class LandingPageController
 
     //// withdraw
 
-    public void updateWithdrawTextArea(Account selectedAccount)
+    public void updateWithdrawTextArea(int selectedAccountIndex)
     {
-        moneyExchangeTextAreaWithdraw.setText(String.format("Customer %s has a total\n" + "of $%.2f in his %s account", allCustomers[selectedCust][1], selectedAccount.getAccAmount(), selectedAccount.getAccType()));
+        moneyExchangeTextAreaWithdraw.setText(String.format("Customer %s has a total\n" + "of $%.2f in his %s account", allCustomers[selectedCust][1], allCustomers[selectedCust][4], allCustomers[selectedCust][2]));
     }
 
     public void withdrawComboBoxChange()
     {
         if(withdrawAccountTypeComboBox.getValue() != null)
         {
-            updateWithdrawTextArea((Account) withdrawAccountTypeComboBox.getValue());
+            updateWithdrawTextArea(withdrawAccountTypeComboBox.getSelectionModel().getSelectedIndex());
         }
     }
 
@@ -671,8 +671,8 @@ public class LandingPageController
         if(validateAmount(withdrawAmountTextField.getText()) && withdrawAccountTypeComboBox.getValue() != null)
         {
             LocalDate creationDate = java.time.LocalDate.now();
-            Account selectedAccount = (Account) withdrawAccountTypeComboBox.getValue();
-            int check = DepositWithdraw.createNewDWEntry(selectedAccount.getAccID(), creationDate, withdrawAmountTextField.getText(), 'w');
+            int selectedAccountIndex = withdrawAccountTypeComboBox.getSelectionModel().getSelectedIndex();
+            int check = createNewDWEntry(allCustomers[selectedCust][0], creationDate, withdrawAmountTextField.getText(), 'w');
 
             if(successfulWithdraw(check))
             {
@@ -684,16 +684,16 @@ public class LandingPageController
     }
 
     ////deposit
-    public void updateDepositTextArea(Account selectedAccount, Customer selectedCustomer)
+    public void updateDepositTextArea(int accountIndex)
     {
-        moneyExchangeTextAreaDeposit.setText(String.format("Customer %s has a total\n" + "of $%.2f in his %s account",selectedCustomer.getFname(), selectedAccount.getAccAmount(), selectedAccount.getAccType()));
+        moneyExchangeTextAreaDeposit.setText(String.format("Customer %s has a total\n" + "of $%.2f in his %s account", allCustomers[selectedCust][1], allAccounts[accountIndex][4] , allAccounts[accountIndex][2]));
     }
 
     public void depositComboBoxChange()
     {
         if(depositAccountTypeComboBox.getValue() != null)
         {
-            updateDepositTextArea((Account) depositAccountTypeComboBox.getValue(), selectedCust);
+            updateDepositTextArea(depositAccountTypeComboBox.getSelectionModel().getSelectedIndex());
         }
     }
 
@@ -709,8 +709,8 @@ public class LandingPageController
         if(validateAmount(depositAmountTextField.getText()) && depositAccountTypeComboBox.getValue() != null)
         {
             LocalDate creationDate = java.time.LocalDate.now();
-            Account selectedAccount = (Account) depositAccountTypeComboBox.getValue();
-            int check = createNewDWEntry(selectedAccount.getAccID(), creationDate, depositAmountTextField.getText(), 'd');
+            int selectedAccountIndex = depositAccountTypeComboBox.getSelectionModel().getSelectedIndex();
+            int check = createNewDWEntry(allCustomers[selectedCust][0], creationDate, depositAmountTextField.getText(), 'd');
 
             if(successfulDeposit(check))
             {
