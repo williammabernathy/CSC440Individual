@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -151,7 +152,14 @@ public class LandingPageController
         allCustomers = getAllCustomers();
 
         //fill the listview with all customers
-        customerListView.getItems().addAll(allCustomers);
+        for(int i = 0; i < allCustomers.length; i++)
+        {
+            if(allCustomers[i][0] == null)
+            {
+                break;
+            }
+            customerListView.getItems().add(allCustomers[i][1] + " " + allCustomers[i][2]);
+        }
     }
 
     // refresh all contents of the customer listview
@@ -175,7 +183,14 @@ public class LandingPageController
         allCustomers = getAllCustomers();
 
         //fill the listview with all customers
-        customerListView.getItems().addAll(allCustomers);
+        for(int i = 0; i < allCustomers.length; i++)
+        {
+            if (allCustomers[i][0] == null)
+            {
+                break;
+            }
+            customerListView.getItems().add(allCustomers[i][1] + " " + allCustomers[i][2]);
+        }
     }
 
     // refresh all contents of the customer listview
@@ -188,7 +203,14 @@ public class LandingPageController
         allAccounts = getAllAccounts(allCustomers[selectedCust][0]);
 
         //fill listview with accounts under that customer
-        allAccountsListView.getItems().addAll(allAccounts);
+        for(int i = 0; i < allAccounts.length; i++)
+        {
+            if (allAccounts[i][0] == null)
+            {
+                break;
+            }
+            allAccountsListView.getItems().add("Account Type: " + allAccounts[i][2] + " | Balance: " + allAccounts[i][4]);
+        }
     }
 
     /*
@@ -238,7 +260,14 @@ public class LandingPageController
         customerListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         //fill the listview with all customers
-        customerListView.getItems().addAll(searchedCustomers);
+        for(int i = 0; i < searchedCustomers.length; i++)
+        {
+            if (searchedCustomers[i][0] == null)
+            {
+                break;
+            }
+            customerListView.getItems().add(searchedCustomers[i][1] + " " + searchedCustomers[i][2]);
+        }
     }
 
     /*
@@ -272,7 +301,14 @@ public class LandingPageController
             allAccounts = getAllAccounts(allCustomers[selectedCust][0]);
 
             //fill listview with accounts under that customer
-            allAccountsListView.getItems().addAll(allAccounts);
+            for(int i = 0; i < allAccounts.length; i++)
+            {
+                if (allAccounts[i][0] == null)
+                {
+                    break;
+                }
+                allAccountsListView.getItems().add("Account Type: " + allAccounts[i][2] + " | Balance: " + allAccounts[i][4]);
+            }
 
             mainLoanServices.setDisable(false);
             mainMoneyExchangeButton.setDisable(false);
@@ -582,19 +618,26 @@ public class LandingPageController
     * Loan Services Pane
     * Zach
     */
-    public void loanServicesButtonClicked(ActionEvent mouseEvent) {
+    public void loanServicesButtonClicked(ActionEvent mouseEvent)
+    {
         searchBox.setVisible(false);
         displaySelectedView(loanServicesPane);
         popCustIDfield();
         popCustName();
     }
-    public void popCustIDfield(){
+
+    public void popCustIDfield()
+    {
         loanCustomerIDTextField.setText(allCustomers[selectedCust][0]);
     }
-    public void popCustName(){
+
+    public void popCustName()
+    {
         loanAccountHolderTextField.setText(allCustomers[selectedCust][2] + ", " + allCustomers[selectedCust][1]);
     }
-    public void newLoanSumbit(ActionEvent actionEvent){
+
+    public void newLoanSumbit(ActionEvent actionEvent)
+    {
         String custID = loanCustomerIDTextField.getText();
         String loanAmount = loanAmountTextField.getText();
         if(validateCustID(custID) && validateAmount(loanAmount)){
@@ -602,23 +645,28 @@ public class LandingPageController
         }
     }
 
-    private void enterLoanToDB(String customerID, String amount) {
+    private void enterLoanToDB(String customerID, String amount)
+    {
         //get current date
         LocalDate creationDate = java.time.LocalDate.now();
         amount = "-" + amount;
 
         //query database with entered information
         int check = createNewAccount(customerID, "L", creationDate, amount);
-        if(successfulNewAccount(check)){
+        if(successfulNewAccount(check))
+        {
             refreshAccountListView();
         }
     }
 
-    private boolean validateCustID(String custID) {
-        try {
+    private boolean validateCustID(String custID)
+    {
+        try
+        {
             Double.parseDouble(custID);
         }
-        catch (NumberFormatException e) {
+        catch (NumberFormatException e)
+        {
             Alert alert = new Alert(Alert.AlertType.ERROR, "ID must be a number!", ButtonType.OK);
             alert.showAndWait();
             return false;
@@ -648,7 +696,7 @@ public class LandingPageController
 
     public void updateWithdrawTextArea(int selectedAccountIndex)
     {
-        moneyExchangeTextAreaWithdraw.setText(String.format("Customer %s has a total\n" + "of $%.2f in his %s account", allCustomers[selectedCust][1], allCustomers[selectedCust][4], allCustomers[selectedCust][2]));
+        moneyExchangeTextAreaWithdraw.setText(String.format("Customer %s has a total\n" + "of $%.2s in his %s account", allCustomers[selectedCust][1], allCustomers[selectedCust][4], allCustomers[selectedCust][2]));
     }
 
     public void withdrawComboBoxChange()
@@ -662,7 +710,14 @@ public class LandingPageController
     private void refreshWithdrawCB()
     {
         withdrawAccountTypeComboBox.getItems().clear();
-        withdrawAccountTypeComboBox.getItems().addAll(allAccounts);
+        for(int i = 0; i < allAccounts.length; i++)
+        {
+            if (allAccounts[i][0] == null)
+            {
+                break;
+            }
+            withdrawAccountTypeComboBox.getItems().add("Account Type: " + allAccounts[i][2] + " | Balance: " + allAccounts[i][4]);
+        }
         moneyExchangeTextAreaWithdraw.setText("No Account Selected");
     }
 
@@ -686,7 +741,7 @@ public class LandingPageController
     ////deposit
     public void updateDepositTextArea(int accountIndex)
     {
-        moneyExchangeTextAreaDeposit.setText(String.format("Customer %s has a total\n" + "of $%.2f in his %s account", allCustomers[selectedCust][1], allAccounts[accountIndex][4] , allAccounts[accountIndex][2]));
+        moneyExchangeTextAreaDeposit.setText(String.format("Customer %s has a total\n" + "of $%.2s in his %s account", allCustomers[selectedCust][1], allAccounts[accountIndex][4] , allAccounts[accountIndex][2]));
     }
 
     public void depositComboBoxChange()
@@ -700,7 +755,16 @@ public class LandingPageController
     private void refreshDepositCB()
     {
         depositAccountTypeComboBox.getItems().clear();
-        depositAccountTypeComboBox.getItems().addAll(allAccounts);
+
+        for(int i = 0; i < allAccounts.length; i++)
+        {
+            if (allAccounts[i][0] == null)
+            {
+                break;
+            }
+            depositAccountTypeComboBox.getItems().add("Account Type: " + allAccounts[i][2] + " | Balance: " + allAccounts[i][4]);
+        }
+
         moneyExchangeTextAreaDeposit.setText("No Account Selected");
     }
 
@@ -745,8 +809,7 @@ public class LandingPageController
                 }
             }
         }
-        else
-            {
+        else {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "To and From account can not be the same!", ButtonType.OK);
             alert.showAndWait();
         }
