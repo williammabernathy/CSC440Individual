@@ -727,7 +727,7 @@ public class LandingPageController
         {
             LocalDate creationDate = java.time.LocalDate.now();
             int selectedAccountIndex = withdrawAccountTypeComboBox.getSelectionModel().getSelectedIndex();
-            int check = createNewDWEntry(allCustomers[selectedCust][0], creationDate, withdrawAmountTextField.getText(), 'w');
+            int check = createNewDWEntry(allAccounts[selectedAccountIndex][0], creationDate, withdrawAmountTextField.getText(), 'w');
 
             if(successfulWithdraw(check))
             {
@@ -774,7 +774,7 @@ public class LandingPageController
         {
             LocalDate creationDate = java.time.LocalDate.now();
             int selectedAccountIndex = depositAccountTypeComboBox.getSelectionModel().getSelectedIndex();
-            int check = createNewDWEntry(allCustomers[selectedCust][0], creationDate, depositAmountTextField.getText(), 'd');
+            int check = createNewDWEntry(allAccounts[selectedAccountIndex][0], creationDate, depositAmountTextField.getText(), 'd');
 
             if(successfulDeposit(check))
             {
@@ -1149,7 +1149,8 @@ public class LandingPageController
         if (type == 'w')
             amount = "-"+amount;
 
-        try{
+        try
+        {
             String query = String.format("INSERT INTO depositewithdraw(accountid, actiontype, dwDate, amount) VALUES(%s, '%c', STR_TO_DATE('%s', '%%m/%%d/%%Y'), %s);", accountID, type, form.format(date), amount);
             Statement st = connection.createStatement();
             int rs = st.executeUpdate(query);

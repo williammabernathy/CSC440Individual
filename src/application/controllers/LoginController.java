@@ -43,8 +43,8 @@ public class LoginController
         verification = validateLogin(validateUser, validatePass);
 
         //check if password matched
-        if (verification == 1) {
-            System.out.println(loggedUser);
+        if (verification == 1)
+        {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getResource("../../resources/view/landingPage.fxml"));
